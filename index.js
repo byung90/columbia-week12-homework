@@ -40,4 +40,34 @@ const actionOptions = () => {
         ]
       }
     )
+    .then((answer) => {
+      switch (answer.action) {
+        case 'Add new department':
+          break;
+        case 'Add new role':
+          break;
+        case 'Add new employee':
+          break;
+        case 'View all departments':
+          break;
+        case 'View all roles':
+          break;
+        case 'View all employees':
+          break;
+        case 'View employees by manager':
+          break;
+        case 'Update employee role':
+          break;
+        case 'Update employee manager':
+          break;
+        case 'Delete department':
+          break;
+        case 'Delete role':
+          break;
+        case 'Delete employee':
+          break;
+        case 'View combined salary of department':
+          break;
+      }
+    })
 }
