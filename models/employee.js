@@ -5,7 +5,7 @@ const createEmployee = (employee) => {
   return new Promise((resolve, reject) => {
     if (employee.managerId) {
       const query = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?, ?)'
-      connection.query(query, [firstName, lastName, roleId, managerId], (err, res) => {
+      connection.query(query, [employee.firstName, employee.lastName, employee.roleId, employee.managerId], (err, res) => {
         if (err) reject(err);
         console.log(`Employee Id: ${res.insertId}`)
         resolve();
@@ -45,6 +45,16 @@ const getAllEmployees = () => {
 }
 
 const getAllEmployeesByManagerId = (managerId) => {
+  return new Promise((resolve, reject) => {
+    const query = 'select * from employee where manager_id =?';
+    connection.query(query, managerId, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    })
+  })
+}
+
+const getAllEmployeesByDepartmentId = (departmentId) => {
   return new Promise((resolve, reject) => {
     const query = 'select * from employee where manager_id =?';
     connection.query(query, managerId, (err, res) => {

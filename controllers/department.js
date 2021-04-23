@@ -18,7 +18,13 @@ const addNewDepartment = async () => {
 
 const viewAllDepartments = async () => {
   const allDepartments = await getAllDepartments();
-  console.log(allDepartments);
+  let formattedDepartments = [];
+
+  for (const department of allDepartments) {
+    formattedDepartments.push(`${department.id}. ${department.name}`);
+  }
+
+  console.log(formattedDepartments);
 }
 
 const removeDepartment = async () => {
