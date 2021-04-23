@@ -2,7 +2,9 @@ const {
   createEmployee,
   getAllEmployees,
   deleteEmployee,
-  getAllEmployeesByManagerId
+  getAllEmployeesByManagerId,
+  putEmployeeRole,
+  putEmployeeManager
 } = require('./../models/employee');
 const {
   getAllRoles
@@ -23,6 +25,8 @@ const addNewEmployee = async () => {
   for (const employee of allEmployeesByDepartment) {
     formattedEmployees.push(`${employee.id}. ${employee.first_name} ${employee.last_name}`)
   }
+
+  formattedEmployees.push(`No Manager`);
 
   const employee = await inquirer.prompt([
     {
@@ -52,12 +56,16 @@ const addNewEmployee = async () => {
   const roleId = employee.role.substring(0, employee.role.indexOf('.'));
   const managerId = employee.managerId.substring(0, employee.managerId.indexOf('.'));
 
-  const newEmployee = {
+  let newEmployee = {
     firstName: employee.firstName,
     lastName: employee.lastName,
     roleId: roleId,
-    managerId: managerId
   }
+
+  if (employee.managerId !== 'No Manager') {
+    newEmployee.managerId = managerId;
+  }
+
   await createEmployee(newEmployee);
 }
 
@@ -121,9 +129,78 @@ const viewEmployeesByManager = async () => {
   console.log(formattedEmployeesByManager);
 }
 
+const updateEmployeeRole = async () => {
+  const allEmployees = await getAllEmployees();
+  const formattedEmployees = [];
+
+  for (const employee of allEmployees) {
+    formattedEmployees.push(`${employee.id}. ${employee.first_name} ${employee.last_name}`)
+  }
+
+  const allRoles = await getAllRoles();
+  const formattedRoles = [];
+
+  for (const role of allRoles) {
+    formattedRoles.push(`${role.id}. ${role.title} - Salary: ${role.salary} - Department Id: ${role.department_id}`)
+  }
+
+  const employee = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'employee',
+      message: 'Which employee has a new role?',
+      choices: formattedEmployees
+    },
+    {
+      type: 'list',
+      name: 'role',
+      message: 'What is the new role?',
+      choices: formattedRoles
+    }
+  ])
+
+  const employeeId = employee.employee.substring(0, employee.employee.indexOf('.'));
+  const newRoleId = employee.role.substring(0, employee.role.indexOf('.'));
+
+  const updatedEmployee = await putEmployeeRole(employeeId, newRoleId);
+  console.log(updatedEmployee);
+}
+
+const updateEmployeeManager = async () => {
+  const allEmployees = await getAllEmployees();
+  const formattedEmployees = [];
+
+  for (const employee of allEmployees) {
+    formattedEmployees.push(`${employee.id}. ${employee.first_name} ${employee.last_name}`)
+  }
+
+  const employee = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'employee',
+      message: 'Which employee has a new role?',
+      choices: formattedEmployees
+    },
+    {
+      type: 'list',
+      name: 'newManager',
+      message: 'What is the new role?',
+      choices: formattedEmployees
+    }
+  ])
+
+  const employeeId = employee.employee.substring(0, employee.employee.indexOf('.'));
+  const newManagerId = employee.newManager.substring(0, employee.newManager.indexOf('.'));
+
+  const updatedEmployee = await putEmployeeManager(employeeId, newManagerId);
+  console.log(updatedEmployee);
+}
+
 module.exports = {
   viewEmployeesByManager,
   viewAllEmployees,
   addNewEmployee,
-  removeEmployee
+  removeEmployee,
+  updateEmployeeRole,
+  updateEmployeeManager
 }

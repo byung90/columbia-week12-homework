@@ -46,7 +46,7 @@ const getAllEmployees = () => {
 
 const getAllEmployeesByManagerId = (managerId) => {
   return new Promise((resolve, reject) => {
-    const query = 'select * from employee where manager_id =?';
+    const query = 'select * from employee where manager_id = ?';
     connection.query(query, managerId, (err, res) => {
       if (err) reject(err);
       resolve(res);
@@ -56,7 +56,7 @@ const getAllEmployeesByManagerId = (managerId) => {
 
 const getAllEmployeesByDepartmentId = (departmentId) => {
   return new Promise((resolve, reject) => {
-    const query = 'select * from employee where manager_id =?';
+    const query = 'select * from employee where manager_id = ?';
     connection.query(query, managerId, (err, res) => {
       if (err) reject(err);
       resolve(res);
@@ -64,9 +64,31 @@ const getAllEmployeesByDepartmentId = (departmentId) => {
   })
 }
 
+const putEmployeeRole = (employeeId, newRoleId) => {
+  return new Promise((resolve, reject) => {
+    const query = 'update employee set role_id = ? where id = ?';
+    connection.query(query, [newRoleId, employeeId], (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  })
+}
+
+const putEmployeeManager = (employeeId, newManagerId) => {
+  return new Promise((resolve, reject) => {
+    const query = 'update employee set manager_id = ? where id = ?';
+    connection.query(query, [newManagerId, employeeId], (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  })
+}
+
 module.exports = {
   createEmployee,
   getAllEmployees,
   deleteEmployee,
-  getAllEmployeesByManagerId
+  getAllEmployeesByManagerId,
+  putEmployeeRole,
+  putEmployeeManager
 };

@@ -14,9 +14,13 @@ const {
   viewEmployeesByManager,
   viewAllEmployees,
   addNewEmployee,
-  removeEmployee
+  removeEmployee,
+  updateEmployeeRole,
+  updateEmployeeManager
 } = require('./controllers/employee');
-
+const {
+  getCombinedDepartmentSalary
+} = require('./controllers/budget');
 
 const actionOptions = () => {
   inquirer
@@ -67,8 +71,10 @@ const actionOptions = () => {
           viewEmployeesByManager();
           break;
         case 'Update employee role':
+          updateEmployeeRole();
           break;
         case 'Update employee manager':
+          updateEmployeeManager();
           break;
         case 'Delete department':
           removeDepartment();
@@ -80,6 +86,7 @@ const actionOptions = () => {
           removeEmployee();
           break;
         case 'View combined salary of department':
+          getCombinedDepartmentSalary();
           break;
         case 'Exit':
           connection.end();
